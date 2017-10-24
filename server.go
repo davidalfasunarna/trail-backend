@@ -20,16 +20,16 @@ type Post struct {
 
 func main() {
 	r := mux.NewRouter()
+	r.NotFoundHandler = http.HandlerFunc(pageNotFound)
 	r.HandleFunc("/api/trial-category/{trial_category_id}", handleSingleRequest)
 	r.HandleFunc("/api/all-trial-category/", handleMultipleRequest)
 
 	log.Fatal(http.ListenAndServe(":8080", r))
-	// server := http.Server{
-	// 	Addr: ":8080",
-	// }
-	// http.HandleFunc("/api/trial-category/", handleSingleRequest)
-	// http.HandleFunc("/api/all-trial-category/", handleMultipleRequest)
-	// server.ListenAndServe()
+}
+
+func pageNotFound(w http.ResponseWriter, r *http.Request) {
+	http.Error(w, "404 Page not found", 404)
+	return
 }
 
 // main handler function
@@ -57,8 +57,6 @@ func handleMultipleRequest(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// Retrieve a post
-// GET /post/1
 func handleSingleGet(w http.ResponseWriter, r *http.Request) (err error) {
 	trial_category_id, err := strconv.Atoi(path.Base(r.URL.Path))
 	if err != nil {
@@ -78,16 +76,6 @@ func handleSingleGet(w http.ResponseWriter, r *http.Request) (err error) {
 }
 
 func handleMultipleGet(w http.ResponseWriter, r *http.Request) (err error) {
-	// post := []Post{
-	// 	Post{
-	// 		Trial_category_id: 100,
-	// 		Trial_name:        "Testing",
-	// 	},
-	// 	Post{
-	// 		Trial_category_id: 101,
-	// 		Trial_name:        "Testing 2",
-	// 	},
-	// }
 	post, err := getTrialCategoryList()
 	if err != nil {
 		return
