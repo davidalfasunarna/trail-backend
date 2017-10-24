@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"path"
 	"strconv"
+	"log"
+	"github.com/gorilla/mux"
 )
 
 type AllPost struct {
@@ -17,12 +19,17 @@ type Post struct {
 }
 
 func main() {
-	server := http.Server{
-		Addr: ":8080",
-	}
-	http.HandleFunc("/api/trial-category/", handleSingleRequest)
-	http.HandleFunc("/api/all-trial-category/", handleMultipleRequest)
-	server.ListenAndServe()
+	r := mux.NewRouter()
+	r.HandleFunc("/api/trial-category/{trial_category_id}", handleSingleRequest)
+	r.HandleFunc("/api/all-trial-category/", handleMultipleRequest)
+
+	log.Fatal(http.ListenAndServe(":8080", r))
+	// server := http.Server{
+	// 	Addr: ":8080",
+	// }
+	// http.HandleFunc("/api/trial-category/", handleSingleRequest)
+	// http.HandleFunc("/api/all-trial-category/", handleMultipleRequest)
+	// server.ListenAndServe()
 }
 
 // main handler function

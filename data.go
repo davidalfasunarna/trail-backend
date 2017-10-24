@@ -10,7 +10,7 @@ var Db *sql.DB
 // connect to the Db
 func init() {
 	var err error
-	Db, err = sql.Open("postgres", "user=postgres dbname=go-backend password=root sslmode=disable")
+	Db, err = sql.Open("postgres", "user=postgres dbname=trail-backend password=root sslmode=disable")
 	if err != nil {
 		panic(err)
 	}
@@ -24,8 +24,8 @@ func getTrialCategory(trial_category_id int) (post Post, err error) {
 	return
 }
 
-func getTrialCategoryList() (post AllPost, err error) {
-	post = AllPost{}
+func getTrialCategoryList() (post []Post, err error) {
+	post = []Post{}
 
 	rows, err := Db.Query("SELECT trial_category_id,trial_name FROM ms_trial_category LIMIT $1", 100)
 	if err != nil {
@@ -38,7 +38,7 @@ func getTrialCategoryList() (post AllPost, err error) {
 		if err := rows.Scan(&temp.Trial_category_id, &temp.Trial_name); err != nil {
 			// handle error
 		}
-		post.Posts = append(post.Posts, temp)
+		post = append(post, temp)
 	}
 	if rows.Err() != nil {
 		// handle error
