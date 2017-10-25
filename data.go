@@ -45,3 +45,27 @@ func getTrialCategoryList() (post []Post, err error) {
 	}
 	return
 }
+
+// Create a new post
+func (post *Post) create() (err error) {
+	statement := "INSERT INTO ms_trial_category (trial_name) VALUES ($1) RETURNING trial_category_id"
+	stmt, err := Db.Prepare(statement)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+	err = stmt.QueryRow(post.Trial_name).Scan(&post.Trial_category_id)
+	return
+}
+
+// Update a post
+func (post *Post) update() (err error) {
+	_, err = Db.Exec("UPDATE ms_trial_category SET trial_name = $2 WHERE trial_category_id = $1", post.Trial_category_id, post.Trial_name)
+	return
+}
+
+// Delete a post
+func (post *Post) delete() (err error) {
+	_, err = Db.Exec("DELETE FROM ms_trial_category WHERE trial_category_id = $1", post.Trial_category_id)
+	return
+}
