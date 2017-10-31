@@ -14,16 +14,16 @@ type AllPost struct {
 }
 
 type Post struct {
-	Trial_category_id int    `json:"trial_category_id"`
-	Trial_name        string `json:"trial_name"`
+	Trail_category_id int    `json:"trail_category_id"`
+	Trail_name        string `json:"trail_name"`
 }
 
 func main() {
 	r := mux.NewRouter()
 	r.NotFoundHandler = http.HandlerFunc(pageNotFound)
-	r.HandleFunc("/api/trial-category/", handleSingleRequest)
-	r.HandleFunc("/api/trial-category/{trial_category_id}", handleSingleRequest)
-	r.HandleFunc("/api/all-trial-category/", handleMultipleRequest)
+	r.HandleFunc("/api/trail-category/", handleSingleRequest)
+	r.HandleFunc("/api/trail-category/{trail_category_id}", handleSingleRequest)
+	r.HandleFunc("/api/all-trail-category/", handleMultipleRequest)
 
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
@@ -65,11 +65,11 @@ func handleMultipleRequest(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleSingleGet(w http.ResponseWriter, r *http.Request) (err error) {
-	trial_category_id, err := strconv.Atoi(path.Base(r.URL.Path))
+	trail_category_id, err := strconv.Atoi(path.Base(r.URL.Path))
 	if err != nil {
 		return
 	}
-	post, err := getTrialCategory(trial_category_id)
+	post, err := getTrailCategory(trail_category_id)
 	if err != nil {
 		return
 	}
@@ -83,7 +83,7 @@ func handleSingleGet(w http.ResponseWriter, r *http.Request) (err error) {
 }
 
 func handleMultipleGet(w http.ResponseWriter, r *http.Request) (err error) {
-	post, err := getTrialCategoryList()
+	post, err := getTrailCategoryList()
 	if err != nil {
 		return
 	}
@@ -115,7 +115,7 @@ func handlePut(w http.ResponseWriter, r *http.Request) (err error) {
 	if err != nil {
 		return
 	}
-	post, err := getTrialCategory(id)
+	post, err := getTrailCategory(id)
 	if err != nil {
 		return
 	}
@@ -136,7 +136,7 @@ func handleDelete(w http.ResponseWriter, r *http.Request) (err error) {
 	if err != nil {
 		return
 	}
-	post, err := getTrialCategory(id)
+	post, err := getTrailCategory(id)
 	if err != nil {
 		return
 	}
